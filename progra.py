@@ -909,10 +909,11 @@ def imprimir_personas(personas_area,texto,inicio,fin):
 		fila=""
 		fila += "              "+'\t'+ str(personas_area[inicio][1]) #numero de persona
 		fila += '\t'+ str(personas_area[inicio][2])+" "+ str(personas_area[inicio][3])+ " "+str(personas_area[inicio][4]) #nombre de persona
+		
 		if informacion_usuario[1]==personas_area[inicio][1]: #valida si la persona es su mejor amigo o no
 			fila+= "\033[6;33m🫂 \033[0;0m"
 			
-		fila += '\t'+ str(personas_area[inicio][5]) #edad de persona
+		fila += '      \t'+ str(personas_area[inicio][5]) #edad de persona
 		
 		if personas_area[inicio][6]!="": #valida si la persona tiene apodo
 			fila += '\t'+ str(personas_area[inicio][6]) #apodo de persona
@@ -957,7 +958,7 @@ def area_verde_llena(area_verde,personas_area,personas,areas_verdes):
 			         """+area_verde[2]+" "+area_verde[1]+"""         """+area_verde[3]+"""         """+area_verde[4]+"""       """+evento+"""
 			
         \033[4;32m****************************************************************************************************************************\033[0;0m
-        \033[4;32m*\033[0;0m\tN    \tNombre            \tEdad \tApodo     \tGenero      \tMascota       \tPuntos de amistad          \033[4;32m*\033[0;0m
+        \033[4;32m*\033[0;0m\tN    \tNombre                   \tEdad \tApodo     \tGenero      \tMascota       \tPuntos de amistad          \033[4;32m*\033[0;0m
         \033[4;32m****************************************************************************************************************************\033[0;0m
 	"""
 	
