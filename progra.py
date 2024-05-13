@@ -915,11 +915,6 @@ def imprimir_personas(personas_area,texto,inicio,fin):
 			
 		fila += '      \t'+ str(personas_area[inicio][5]) #edad de persona
 		
-		if personas_area[inicio][6]!="": #valida si la persona tiene apodo
-			fila += '\t'+ str(personas_area[inicio][6]) #apodo de persona
-		
-		else:
-			fila += '\t\033[1;31m  ✘  \033[0;0m' #no posee apodo 
 		
 		fila += '       \t'+ str(personas_area[inicio][11]) #genero de persona
 		
@@ -958,7 +953,7 @@ def area_verde_llena(area_verde,personas_area,personas,areas_verdes):
 			         """+area_verde[2]+" "+area_verde[1]+"""         """+area_verde[3]+"""         """+area_verde[4]+"""       """+evento+"""
 			
         \033[4;32m****************************************************************************************************************************\033[0;0m
-        \033[4;32m*\033[0;0m\tN    \tNombre                   \tEdad \tApodo     \tGenero      \tMascota       \tPuntos de amistad          \033[4;32m*\033[0;0m
+        \033[4;32m*\033[0;0m\tN    \tNombre                   \tEdad      \tGenero      \tMascota       \tPuntos de amistad          \033[4;32m*\033[0;0m
         \033[4;32m****************************************************************************************************************************\033[0;0m
 	"""
 	
