@@ -127,8 +127,19 @@ dialogos_mascotas={"1":["¡Guau! ¡Con tanto sol, hasta mis ladridos suenan más
     "¡Con tanto amor y cariño, hasta los gruñidos se convierten en canciones de alegría!",
     "¡Oink! ¡Este mundo es nuestro patio de recreo, lleno de aventuras y amigos de cuatro patas por todas partes!"]}
 
-dialogo_campania=([]) #Aqui van los dialogos de la campania
-
+dialogo_campania=["\t¡Nuestro planeta necesita nuestra ayuda! La crisis del agua está amenazando con salirse de control, debemos tomar las riendas.\n\tLa demanda del agua ha aumentado y se proyecta que para el 2050, 2.4 mil millones de personas sufrirán por la escases de agua. ",
+                   "\t¡No uses plástico! Existen varias alternativas sostenibles a este material. La concentración del plástico en el océano ha\n\taumentado en 16 billones de piezas desde 2005.",
+                   "\t¿Sabías que alrededor del 10 % de las especies de fauna marina están en peligro de extinción? Esto gracias al cambio climático\n\ty las cazas excesivas. Especies como las ballenas, tiburones y abulones se encuentran bajo presión, por su alto precio dentro\ndel mercado.",
+                  "\t¿Sabías que la contaminación del aire nos afecta más de lo que creemos? Dentro de esto se encuentran afectaciones en la salud, \n\tcomo problemas en el sistema respiratorio, o el enorme problema del cambio climático.",
+                  "\t¡Busca alternativas de transporte! Los automóviles, camiones y motocicletas en masa son de los mayores emisores de CO2 del mundo.",
+                  "\t¡Es posible reducir el consumo de plástico! En su día a día, puede que utilice muchos productos de plástico de un solo uso. Evite\n\testo, la mayoría de esos desechos llegan al océano, afectando a la vida marina, e incluso, ese plástico puede llegar a nuestros\ncuerpos. ",
+                  "\t¡El reciclaje no es suficiente, debe de reducir su consumo! El consumo de cosas innecesarias hechas de materiales como el\n\tplástico debe ser lo primero que elimine de su rutina para colaborar con el cambio.",
+                  "\t¡Las fábricas e industria condenan el medio ambiente! Más de la mitad de los gases de efecto invernadero son producidos\n\tpor la industria, además, son responsables de contaminación en el agua y suelo, además de las grandes masas de residuos\nque generan.",
+                  "\t¡¿Sabía de los efectos de la contaminación agrícola?!  Esta contaminación surge principalmente por las plantaciones,\n\ten las que se usan agroquímicos como pesticidas, herbicidas y demás. Afectan las fuentes de agua y vida silvestre\ncercanas. ",
+                  "\t¡La contaminación agrícola es un gran problema! No solo tiene enormes efectos en las zonas silvestres cercanas a\n\tplantaciones masivas, sino que afecta nuestra propia vida. Los agroquímicos son lavados del suelo por la lluvia y\nllegan a fuentes de agua limpia. ",
+                  "\t¡La deforestación no es una broma! Los arboles son elementos fundamentales para los ecosistemas, el ciclo del agua, evitar la erosión del suelo.",
+                  "\t¡La tala masiva de árboles es un enorme problema! Los arboles son capaces de almacenar y sellar ciertas cantidades\n\tde dióxido de carbono, que es un gas de efecto invernadero. La deforestación contribuye al calentamiento global.",
+                ]
 #Listas de informacion
 informacion_usuario=["",-1]
 
@@ -548,7 +559,7 @@ def crear_personas_aux(personas, num_personas, indice, num_parques, nombres_muje
 
         edad = random.randint(5, 100)
 
-        mascota = random.randint(0,5)
+        mascota = random.randint(0,4)
 
         if mascota!= 0:
             nombre_mascota = random.choice(nombres_mascotas)
@@ -561,7 +572,7 @@ def crear_personas_aux(personas, num_personas, indice, num_parques, nombres_muje
 
         humor = ""
         apodo=""
-        persona_temp = [0, id_persona, nombre, apellido1, apellido2, edad, apodo, pts_amistad, humor, mascota,nombre,genero]
+        persona_temp = [0, id_persona, nombre, apellido1, apellido2, edad, pts_amistad, humor, mascota,nombre_mascota,genero]
         persona_temp = variantes_personas(persona_temp, num_parques)
         personas = personas + [persona_temp]
         return crear_personas_aux(personas, num_personas, indice+1, num_parques, nombres_mujeres, nombres_hombres, nombres_agenero, nombres_mascotas, apellidos)
@@ -577,22 +588,21 @@ def variantes_personas(persona, num_parques):
     if type(persona) != list:
         return "Error01"
     else:
-        if num_parques != False:
-        	persona[0] = random.randint(1,num_parques)
+        persona[0] = random.randint(1,num_parques)
 
         humor = ["Triste", "Feliz", "Enojado", "Neutral"]
-        persona[8] = random.choice(humor)
+        persona[7] = random.choice(humor)
         return persona
 
-def recorrer_personas_variantes(indice, num_personas, personas):
+def recorrer_personas_variantes(indice, num_personas, personas,num_zonas):
         """
         Esta función itera sobre las personas, para que la función variantes_personas funcione
         """
         if indice == num_personas:
                 return personas
         else:
-                personas[indice] = variantes_personas(personas[indice],False)
-                return recorrer_personas_variantes(indice+1, num_personas, personas)
+                personas[indice] = variantes_personas(personas[indice],num_zonas)
+                return recorrer_personas_variantes(indice+1, num_personas, personas,num_zonas)
         
 
 # --------------------------------------------------------------
@@ -638,13 +648,13 @@ def tabla_zonas(tabla, zonas, num_zonas, indice, num_personas, personas):
             else:
                 tabla = tabla + "    \t◌"
 
-
-
-        tabla = tabla + "       \t"+ str(len(personas_area)) +"\n"
+        if parque[3]== "Abierto":
+            tabla = tabla + "       \t"+ str(len(personas_area)) +"\n"
+        else:
+            tabla = tabla + "       \t0\n"
 
         return tabla_zonas(tabla, zonas, num_zonas, indice+1, num_personas, personas)
-    
-
+        
 
 def tabla_zonas_bordes(zonas, num_zonas, num_personas, personas):
     tabla =""" """
@@ -680,7 +690,7 @@ def personas_area(persona, id_zona):
 
 # --------------------------------------------------------------
 
-def input_seleccion_zona(num_zonas, mensaje,personas,zonas):
+def input_seleccion_zona(num_zonas, mensaje,personas,zonas,horario_zonas):
 	"""
         Esta fucnión recolecta la zona a la que el usuario quiere acceder.
         E: mensaje (string) predefinido en la función anterior.
@@ -691,15 +701,41 @@ def input_seleccion_zona(num_zonas, mensaje,personas,zonas):
 	zona_seleccionada = input("\033[6;33m\t---> \033[0;0m")
 	if zona_seleccionada == "V" or zona_seleccionada == "v":
 		return menu_principal()
+	elif (zona_seleccionada == "g" or zona_seleccionada == "G") and horario_zonas == False:
+		return turno(0, zonas, num_zonas, personas, len(personas))
+	
 	elif validacion_int(zona_seleccionada) == False:
-		print("¡Debes de ingresar un númer válido! Intentalo de nuevo (ENTER para reintentar)")
-		return input_seleccion_zona(num_zonas,mensaje)
+		print("\t¡Debes de ingresar un númer válido! Intentalo de nuevo (ENTER para reintentar)")
+		return input_seleccion_zona(num_zonas,mensaje,personas,zonas,horario_zonas)
+		
 	elif int(zona_seleccionada) <= 0 or int(zona_seleccionada) > num_zonas:
-		print("¡Debes de ingresar un númer válido! Intentalo de nuevo (ENTER para reintentar)")
-		return input_seleccion_zona(num_zonas,mensaje)
+		print("\t¡Debes de ingresar un númer válido! Intentalo de nuevo (ENTER para reintentar)")
+		return input_seleccion_zona(num_zonas,mensaje,personas,zonas,horario_zonas)
+		
+		
 	else:
 		zona_seleccionada = int(zona_seleccionada)
-		return mostrar_personas(zona_seleccionada,personas,zonas)
+		zona_temp = zonas[zona_seleccionada-1]
+		
+		if zona_temp[3] == "Cerrado":
+			print("\t¡Esta zona está cerrada!(ENTER para reintentar)")
+			return input_seleccion_zona(num_zonas,mensaje,personas,zonas,horario_zonas)
+			
+		else:
+			return mostrar_personas(zona_seleccionada,personas,zonas)
+        
+def validar_zonas_cerradas(zonas,fin,indice):
+	"""
+	e: zonas a validar
+	s: retorna true si encuentra alguna zona abierta
+	r:-
+	"""
+	if indice == fin:
+		return False
+	elif zonas[indice][3]== "Abierto":
+		return True
+	else:
+		return validar_zonas_cerradas(zonas,fin,indice+1)
         
 # --------------------------------------------------------------
 def turno(indice, zonas, num_zonas, personas, num_personas):
@@ -707,15 +743,20 @@ def turno(indice, zonas, num_zonas, personas, num_personas):
                 #Despedida obligada
         #else
         os.system('clear')
-        personas = recorrer_personas_variantes(0, num_personas, personas)
+        personas = recorrer_personas_variantes(0, num_personas, personas,num_zonas)
+        zonas=recorrida_cambios(num_zonas, 0, zonas)
+        
         print("\t\033[0;36m━✿━━━✽━━━━✿━━━✽━━━━✿━━━━✽━━━━✿━━━━✽━━━━✿━━━━✽━━━━✿━━━━━✽━━━━✿━━━━✽━━━━✿━✿━━━✽━━━━✿━━━✽━━━━✿━━━━✽━━━━✿━━━━✽━━━━✿━━━━✽━━━━✿━━━━━✽\033[0;0m")
         print(tabla_zonas_bordes(zonas, num_zonas, num_personas, personas))
         print("\t\033[0;36m━✿━━━✽━━━━✿━━━✽━━━━✿━━━━✽━━━━✿━━━━✽━━━━✿━━━━✽━━━━✿━━━━━✽━━━━✿━━━━✽━━━━✿━✿━━━✽━━━━✿━━━✽━━━━✿━━━━✽━━━━✿━━━━✽━━━━✿━━━━✽━━━━✿━━━━━✽\033[0;0m")
-        mensaje_input_zona = "\t¿A qué zona deseas acceder? o ingresa \033[1;33m\tV\033[0;0m para salir."
         
-        input_seleccion_zona(num_zonas, mensaje_input_zona,personas,zonas)
-
+        horario_zonas=validar_zonas_cerradas(zonas,len(zonas),0)
+        if horario_zonas:
+            mensaje_input_zona = "\t¿A qué zona deseas acceder? o ingresa \033[1;33m\tV\033[0;0m para salir."
+        else:
+            mensaje_input_zona = "\tEn este horario todos los parques estan cerrados o ingresa. \033[1;33m\tV\033[0;0m para salir o \033[1;34m\tG\033[0;0m para volver en otro horario."
         
+        input_seleccion_zona(num_zonas, mensaje_input_zona,personas,zonas,horario_zonas)
 
 
 #----------------------Confirmacion y validacion en los parque
@@ -784,9 +825,10 @@ def listar_personas_aux(key_area_verde,indice,fin,resultado,personas):
 	if indice == fin:
 		return resultado
 	
-	elif personas[indice][0] == key_area_verde: #Persona esta enlazada a la area verde
+	persona = personas[indice]
+	if persona[0] == key_area_verde: #Persona esta enlazada a la area verde
 		return listar_personas_aux(key_area_verde,indice+1,fin,resultado+[personas[indice]],personas)
-	
+		
 	else:
 		return listar_personas_aux(key_area_verde,indice+1,fin,resultado,personas)
 	
@@ -824,7 +866,9 @@ def mostrar_personas(key_area_verde,personas,areas_verdes):
 	"""
 	area_verde=0
 	area_verde = obtener_area_verde(key_area_verde,areas_verdes)
+	
 	personas_area = listar_personas(key_area_verde,personas)
+	
 	#validacion si las areas verdes tienen personas o no
 	if personas_area==[]:
 		return area_verde_vacia(area_verde,personas,areas_verdes)
@@ -909,22 +953,24 @@ def imprimir_personas(personas_area,texto,inicio,fin):
 		fila=""
 		fila += "              "+'\t'+ str(personas_area[inicio][1]) #numero de persona
 		fila += '\t'+ str(personas_area[inicio][2])+" "+ str(personas_area[inicio][3])+ " "+str(personas_area[inicio][4]) #nombre de persona
-		
 		if informacion_usuario[1]==personas_area[inicio][1]: #valida si la persona es su mejor amigo o no
 			fila+= "\033[6;33m🫂 \033[0;0m"
-			
-		fila += '      \t'+ str(personas_area[inicio][5]) #edad de persona
+		if 	len(personas_area[inicio][2]+personas_area[inicio][3]+personas_area[inicio][4])<20:
+			fila += '         \t'+ str(personas_area[inicio][5]) #edad de persona
+		else:
+			fila += '   \t'+ str(personas_area[inicio][5]) #edad de persona
 		
 		
-		fila += '       \t'+ str(personas_area[inicio][11]) #genero de persona
 		
-		if personas_area[inicio][9] == 1:#valida si la persona tiene mascota
-			fila += '     \t'+ str(personas_area[inicio][10]) + "🐾" #mascota de persona
+		fila += '       \t'+ str(personas_area[inicio][10]) #genero de persona
+		
+		if personas_area[inicio][8] != 0:#valida si la persona tiene mascota
+			fila += '     \t'+ str(personas_area[inicio][9]) #mascota de persona
 			
 		else:
 			fila += '    \t\033[1;31m  ✘  \033[0;0m' #no posee mascota
 			
-		fila += '       \t'+ str(personas_area[inicio][7]) #puntos de amistad
+		fila += '       \t'+ str(personas_area[inicio][6]) #puntos de amistad
 		
 		fila +="\n"
 		
@@ -953,7 +999,7 @@ def area_verde_llena(area_verde,personas_area,personas,areas_verdes):
 			         """+area_verde[2]+" "+area_verde[1]+"""         """+area_verde[3]+"""         """+area_verde[4]+"""       """+evento+"""
 			
         \033[4;32m****************************************************************************************************************************\033[0;0m
-        \033[4;32m*\033[0;0m\tN    \tNombre                   \tEdad      \tGenero      \tMascota       \tPuntos de amistad          \033[4;32m*\033[0;0m
+        \033[4;32m*\033[0;0m\tN    \tNombre                     \tEdad      \tGenero      \tMascota       \tPuntos de amistad          \033[4;32m*\033[0;0m
         \033[4;32m****************************************************************************************************************************\033[0;0m
 	"""
 	
@@ -1079,7 +1125,7 @@ def conversar_persona(persona,personas,areas_verdes):
 	
 	os.system('clear')
 	#Validacion de los generos y edades
-	if persona[11] == "Femenino":
+	if persona[10] == "Femenino":
 		#Validacion de las edades
 		if persona[5]>=0 and persona[5]<=18:
 			return conversacion_nina(persona,personas,areas_verdes)
@@ -1088,7 +1134,7 @@ def conversar_persona(persona,personas,areas_verdes):
 		else:
 			return conversacion_anciana(persona,personas,areas_verdes)
 			
-	elif persona[11]=="Binario":
+	elif persona[10]=="Binario":
 		
 		if persona[5]>=0 and persona[5]<=18:
 			return conversacion_nina(persona,personas,areas_verdes)
@@ -1123,8 +1169,8 @@ def conversacion_nina(persona,personas,areas_verdes):
         █▓░░█▓▓█░░█▓▒▒▒▒▒▒▒▒▒▒▓█░░█▓▓█░░▓█                                      \033[1;33m******************************************************************\033[;0m
         ██░▓█▒▒█▒░█▓▒▒▒▒▒▒▒▒▒▒▓█░▒█▒▒█▓░██                                      * Nombre: """+persona[2]+" "+persona[3]+" "+persona[4]+"""
         ██░░▒▓▓▒░░█▓▒▒▒▒▒▒▒▒▒▒▓█░░▒▓▓▒░░██                                      * Edad:   """+str(persona[5])+"""
-         ███▓░░▓█▓▒▒▒▒▒████▒▒▒▒▒▓█▓░░▓███                                       * Humor:  """+persona[8]+"""
-        ██▒▒▒▓▓▒▒▒▒▒▒▒█▒░░▒█▓▒▒▒▒▒▒▓▓▒▒▒██                                      * Genero: """+persona[11]+"""
+         ███▓░░▓█▓▒▒▒▒▒████▒▒▒▒▒▓█▓░░▓███                                       * Humor:  """+persona[7]+"""
+        ██▒▒▒▓▓▒▒▒▒▒▒▒█▒░░▒█▓▒▒▒▒▒▒▓▓▒▒▒██                                      * Genero: """+persona[10]+"""
         █▓▓▓▓▓▓▒▓▓▓▓██░░░░░░██▓▓▓▓▓▓▓▓▓▓▓█                                      * """+mascota+"""
        ██▓░█▒░░░░░░░░░░░░░░░░░░░░░░░░▒█░▓██                                     \033[1;33m*****************************************************************\033[0;0m
        █▓░░█▒░░░░░█▒░░░▒░░▒░░░▒█░░░░░▒█░░▓█  
@@ -1166,8 +1212,8 @@ def conversacion_nino(persona,personas,areas_verdes):
          █████████████████████████████████                                 \033[1;33m******************************************************************\033[0;0m
         ██▒█▓░░░░░░░░░░░░░░░░░░░░░░░░▓█▒▓█                                 * Nombre: """+persona[2]+" "+persona[3]+" "+persona[4]+"""
         ████▒░░░░░░░░░░░░░░░░░░░░░░░░▒████                                 * Edad:   """+str(persona[5])+"""
-       ██░▒█▒░░░░░█▒░░░░░░░░░░▒█░░░░░▒█▒░██                                * Humor:  """+persona[8]+"""
-       █▒░░█▒░░▒▒▒▒░░░░▒██▒░░░░▒▒▒▒░░▒█▒░▒█                                * Genero: """+persona[11]+"""
+       ██░▒█▒░░░░░█▒░░░░░░░░░░▒█░░░░░▒█▒░██                                * Humor:  """+persona[7]+"""
+       █▒░░█▒░░▒▒▒▒░░░░▒██▒░░░░▒▒▒▒░░▒█▒░▒█                                * Genero: """+persona[10]+"""
        ██▒░▓█░░▒▒▒▒░░░░░░░░░░░░▒▒▒▒░░▓▓░▒██                                * """+mascota+"""
          ████▓░░░░░░░░░░░░░░░░░░░░░░▓████                                   \033[1;33m*****************************************************************\033[0;0m
              █▓░░░░░░░░░░░░░░░░░░░░▓█        
@@ -1202,8 +1248,8 @@ def conversacion_adulta(persona,personas,areas_verdes):
           █▓▓▓▓▓▓▓▓██▓░░░░░░▓██▓▓▓▓▓▓▓▓█                \033[1;33m******************************************************************\033[0;0m
          █████████▓░░░░░░░░░░░░▓██████████              * Nombre: """+persona[2]+" "+persona[3]+" "+persona[4]+"""
         █▒▒█▒░░░░░░░░░░░░░░░░░░░░░░░░░█▒▒█              * Edad:   """+str(persona[5])+"""
-        █▓▒█▒░░░░░░█░░░░░░░░░░█░░░░░▒█▒▓█               * Humor:  """+persona[8]+"""
-         ███▓░░░░░░▒▒░░█▓▓█░░▒▒░░░░░░▓███               * Genero: """+persona[11]+"""
+        █▓▒█▒░░░░░░█░░░░░░░░░░█░░░░░▒█▒▓█               * Humor:  """+persona[7]+"""
+         ███▓░░░░░░▒▒░░█▓▓█░░▒▒░░░░░░▓███               * Genero: """+persona[10]+"""
          ██▓█▒░░░░░░░░░░░░░░░░░░░░░░▒█▓██               * """+mascota+"""
          ██▓▓█▒░░░░░░░░░░░░░░░░░░░░▒█▓▓██                \033[1;33m*****************************************************************\033[0;0m
          ██▓▓██░░░░░░░░░░░░░░░░░░██▓▓██     
@@ -1238,8 +1284,8 @@ def conversacion_adulto(persona,personas,areas_verdes):
                   ██▓▓▓▓██████████████████████▓▓▓▓██                           \033[1;33m******************************************************************\033[0;0m
                  ███▓▓▓▓█▒░░░░░░░░░░░░░░░░░░▒█▓▓▓▓▓██                          * Nombre: """+persona[2]+" "+persona[3]+" "+persona[4]+"""
                  ████▓▓█▒░▒░░░░░░░░░░░░░░░░▒░▒█▓▓████                          * Edad:   """+str(persona[5])+"""
-                █▓░▓██▓░░▒█▒░░░░░░░░░░░░░░▒█▒░░▓██▓░▓█                         * Humor:  """+persona[8]+"""
-                ██░▒█▒░░░░░░░░░▒██████▒░░░░░░░░░░█▓░██                         * Genero: """+persona[11]+"""
+                █▓░▓██▓░░▒█▒░░░░░░░░░░░░░░▒█▒░░▓██▓░▓█                         * Humor:  """+persona[7]+"""
+                ██░▒█▒░░░░░░░░░▒██████▒░░░░░░░░░░█▓░██                         * Genero: """+persona[10]+"""
                 ████▒░░░░░░░░▒█▓▒▒▒▒▓█▒░░░░░░░░▒████                          * """+mascota+"""
                    ██▒░░░░░░▒█▓▒▓██▓▒▓█▒░░░░░░▒██                             \033[1;33m*****************************************************************\033[0;0m
                     ██▒░░░░░░▒▒▒▒░░▒▒▒▒░░░░░░▒██      
@@ -1276,8 +1322,8 @@ def conversacion_binario(persona,personas,areas_verdes):
        ██▓░░░░░░░░▒███▓▒▒▒▒▒▒▒▒▒▒▒▒▒▓██████                 \033[1;33m******************************************************************\033[0;0m
       ███▒░░░░░░▒█▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█▓▒██                * Nombre: """+persona[2]+" "+persona[3]+" "+persona[4]+"""
      ██▓█▒░░░░░▓█▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█▓▒▓██               * Edad:   """+str(persona[5])+"""
-     ███▒░░░░██▒▒█▒▒▒▒▓▒▒▓▒▒▒▒█▒▒▒▒▒▒▒█▓▒██                 * Humor:  """+persona[8]+"""
-        ██░░░▒█▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒███                  * Genero: """+persona[11]+"""
+     ███▒░░░░██▒▒█▒▒▒▒▓▒▒▓▒▒▒▒█▒▒▒▒▒▒▒█▓▒██                 * Humor:  """+persona[7]+"""
+        ██░░░▒█▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒███                  * Genero: """+persona[10]+"""
        ███▓░░█▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█▒▒██                 * """+mascota+"""
       ██░▒█▒▒█▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█▒░░░██                \033[1;33m*****************************************************************\033[0;0m
        ██▓▒███▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓██▒░▓██  
@@ -1310,8 +1356,8 @@ def conversacion_anciano(persona,personas,areas_verdes):
             █▒▒▒█▒░░░░░░░░░░░░░░░░░░░░░░░░░█▒▒▒██                          \033[1;33m******************************************************************\033[0;0m
            █████▓░░░░░░░░░░░░░░░░░░░░░░░░░░▓█████                          * Nombre: """+persona[2]+" "+persona[3]+" "+persona[4]+"""
            ██░░█░░░░░░░░░░░░░░░░░░░░░░░░░░░░█░░██                          * Edad:   """+str(persona[5])+"""
-           █▓░░█░░░░░░░░█▒░░░░░░░░▒█░░░░░░░░█░░▓█                          * Humor:  """+persona[8]+"""
-            ██░█▒░░░░░░░░▒████████▒░░░░░░░░░█░██                           * Genero: """+persona[11]+"""
+           █▓░░█░░░░░░░░█▒░░░░░░░░▒█░░░░░░░░█░░▓█                          * Humor:  """+persona[7]+"""
+            ██░█▒░░░░░░░░▒████████▒░░░░░░░░░█░██                           * Genero: """+persona[10]+"""
               ███░░░░░░░░█▒▒▒▒▒▒▒▒█░░░░░░░░███                             * """+mascota+"""
                 █▓░░░░░░█▓▒▒▒██▒▒▒▓█░░░░░░▒█                               \033[1;33m*****************************************************************\033[0;0m
                  █▓░░░░░░░░░░░░░░░░░░░░░░▓█       
@@ -1348,8 +1394,8 @@ def conversacion_anciana(persona,personas,areas_verdes):
      █▒░▒▒█▓░░░░░░░░░░░░░░░░░░░░░░░░░░▓█▒▒░▒█                            \033[1;33m******************************************************************\033[0;0m
      █▒░░▒█░░░███░░▒█░░░░░░░░░░█░░███░░█▒░░▒█                            * Nombre: """+persona[2]+" "+persona[3]+" "+persona[4]+"""
      ██▒░▒█░░░░░░▒▒▒▒░░████░▒▒▒▒▒░░░░░░█▒░▒██                            * Edad:   """+str(persona[5])+"""
-       ████░░░░░▒▒▒▒░░░░░░░░░░▒▒▒▒░░░░░████                              * Humor:  """+persona[8]+"""
-          █▓░░░░░░░░░░░░░░░░░░░░░░░░░░▓█                                 * Genero: """+persona[11]+"""
+       ████░░░░░▒▒▒▒░░░░░░░░░░▒▒▒▒░░░░░████                              * Humor:  """+persona[7]+"""
+          █▓░░░░░░░░░░░░░░░░░░░░░░░░░░▓█                                 * Genero: """+persona[10]+"""
           ██▓░░░░░░░░░░░░░░░░░░░░░░░░▓██                                 * """+mascota+"""
             ██░░░░░░░░░░░░░░░░░░░░░░██                                   \033[1;33m*****************************************************************\033[0;0m
              ███▒░░░░░░░░░░░░░░░░▒███        
@@ -1377,11 +1423,11 @@ def menu_dialogo(persona,personas,areas_verdes):
 	
 	menu=""
 	tipo_menu=0
-	if persona[9] == 1:
+	if persona[8] !=0:
 		tipo_menu=1
 		menu="""
                            \033[0;32m-------------------------\033[0;0m          ------------------------           \033[0;36m-------------------------\033[0;0m 
-                           \033[0;32m-\033[0;0m  H-Hablar con """+persona[2]+"""  -          - M- Hablar con """+persona[10]+"""   -           -     D- Despedirse     -
+                           \033[0;32m-\033[0;0m  H-Hablar con """+persona[2]+"""  -          - M- Hablar con """+persona[9]+"""   -           -     D- Despedirse     -
                            \033[0;32m-------------------------\033[0;0m          ------------------------           \033[0;36m-------------------------\033[0;0m
 	"""
 	else:
@@ -1418,7 +1464,7 @@ def validar_dialogo(opcion,tipo_menu,persona,areas_verdes,personas):
 		return ingresar_dialogo(persona,True,0,personas,areas_verdes)
 	
 	elif tipo_menu==1 and (opcion == "M" or opcion == "m"): # Hablar con la mascota
-		return dialogar_mascota(random.randint(1,4),persona[10],persona,personas,areas_verdes) #COmo parametro recibe un tipo de mascota de manera aleatoria 1-perro 2-gato 3-pajaro 4-cerdito
+		return dialogar_mascota(persona[8],persona[9],persona,personas,areas_verdes) #COmo parametro recibe un tipo de mascota de manera aleatoria 1-perro 2-gato 3-pajaro 4-cerdito
 	
 	else:
 		opcion=input("\tLa opcion ingresada es invalida!!, ingrese una nuevamente -->")
@@ -1436,8 +1482,9 @@ def ingresar_dialogo(persona,retval,puntos,personas,areas_verdes):
 	else:
 		mensaje= input("\t\033[0;33m"+informacion_usuario[0]+"--> \033[0;0m")
 		if mensaje!="Bye" and mensaje!="bye" and mensaje!="BYE":
-			input("\t\033[0;32m"+persona[2]+"-->\033[0;0m "+ str(imprimir_respuesta(persona[8])))
+			input("\t\033[0;32m"+persona[2]+"-->\033[0;0m "+ str(imprimir_respuesta(persona[7])))
 			return ingresar_dialogo(persona,True,puntos+0.5,personas,areas_verdes)
+			
 		else:
 			input("\t\033[0;32m"+persona[2]+"-->\033[0;0m "+" Hasta luego, "+informacion_usuario[0]+"!!, espero verte pronto.")
 			return ingresar_dialogo(persona,False,puntos,personas,areas_verdes)
@@ -1464,7 +1511,7 @@ def modificar_puntos(persona,puntos,inicio,fin,personas):
 		return personas
 		
 	elif persona[1] == personas[inicio][1]: #Encuentra a la persona con la que se le sumaran los puntos
-		personas[inicio][7] += puntos #suma de puntos
+		personas[inicio][6] += puntos #suma de puntos
 		print(" ")
 		print("\t🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸")
 		input("\tHas ganado "+str(puntos)+" puntos de amistad con "+persona[2])
@@ -1474,7 +1521,7 @@ def modificar_puntos(persona,puntos,inicio,fin,personas):
 			
 			mejor_amigo=encontrar_persona(informacion_usuario[1],personas,0,len(personas))
 			
-			if mejor_amigo[7] <= personas[inicio][7] and mejor_amigo[1]!= personas[inicio][1]:#valida que los puntos son mayores y si la persona mejor amiga es distinta
+			if mejor_amigo[6] <= personas[inicio][6] and mejor_amigo[1]!= personas[inicio][1]:#valida que los puntos son mayores y si la persona mejor amiga es distinta
 				
 				informacion_usuario[1]=personas[inicio][1]
 				print(" ")
@@ -1663,11 +1710,11 @@ def ingresar_dialogo_mascota(persona,retval,puntos,tipo_mascota,personas,areas_v
 		mensaje= input("\t\033[0;33m"+informacion_usuario[0]+"--> \033[0;0m")
 		
 		if mensaje!="Bye" and mensaje!="bye" and mensaje!="BYE":
-			input("\t\033[0;32m"+persona[11]+"-->\033[0;0m "+ str(imprimir_respuesta_mascota(tipo_mascota)))
+			input("\t\033[0;32m"+persona[9]+"-->\033[0;0m "+ str(imprimir_respuesta_mascota(tipo_mascota)))
 			return ingresar_dialogo_mascota(persona,True,puntos+1,tipo_mascota,personas,areas_verdes)
 			
 		else:
-			input("\t\033[0;32m"+persona[2]+"-->\033[0;0m "+" Hasta luego, "+informacion_usuario[0]+"!!, espero verte pronto.")
+			input("\t\033[0;32m"+persona[9]+"-->\033[0;0m "+" Hasta luego, "+informacion_usuario[0]+"!!, espero verte pronto.")
 			return ingresar_dialogo_mascota(persona,False,puntos,tipo_mascota,personas,areas_verdes)
 
 
@@ -1726,12 +1773,60 @@ def instrucciones():
 	os.system('clear')
 	
 	instrucciones="""
+	------------------------------------------------------------------------------------------------------------------------------
 
+                                                    ¡Bienvenidx a Solaris!
+
+        Esta es una simulación donde serás capáz de visitar los diversas zonas como Áreas proetgidas, Parques, Reservas y
+                    demás. Además, podrás conversar con las personas que encuentres dentro de estas zonas.
+                                                            
+                                            Todo esto dentro de nuestra comunidad.
+
+        
+                                                       - Instrucciones - 
+
+
+        Solari es una simulación que funciona por turnos. Al inicio del juego, el usuario debe de escoger cuántas zonas y
+                                cuántas personas quiere crear para interactuar con ellas durante el juego. 
+
+            Después de esto comenzará el primer turno, donde al usuario se le mostrarán las zonas creadas y se le pedirá
+                                                que escoja a la que quiere acceder. 
+                                                
+
+            Al entrar en una zona, se le mostrará otra tabla, una que muestre a las personas con las que puede interactuar
+                                                    dentro del área accedida. 
+
+        El usuario puede “conversar” con las personas, pero estas no tienen respuestas acordes a lo que ingrese el usuario.
+            Al hablar con los personajes, el usuario puede decidir terminar las conversación en el momento que desee.
+
+
+
+                                                  - Referencias Bibliográficas -
+
+        Noor, S. (2023) Global Water Crisi Could ‘Spiral out of control’ due to overconsumption and climate change. CNN.
+        https://edition.cnn.com/2023/03/22/world/global-water-crisis-un-report-climate-intl/index.html 
+
+        Rannard, G. (2023) Oceans littered with 171 trillion plastic pieces. BBC.
+        https://www.bbc.com/news/science-environment-64889284 
+
+        Stallard, E. (2023) What is the UN High Seas Treaty and why is it needed? BBC.
+        https://www.bbc.com/news/science-environment-64839763 
+
+        BBC (2021) Air pollution: Even worse than we thought – WHO.
+        https://www.bbc.com/news/science-environment-58657224 
+
+        National Geographic (2022) Cómo vivir con menos plásticos: consejos para reducir el consumo.
+        https://www.nationalgeographicla.com/medio-ambiente/2022/07/como-vivir-con-menos-plastico-consejos-para-reducir-el-consumo 
+
+        Contaminación Ambiental (s.f.) Contaminación Agrícola.
+        https://contaminacionambiental.net/contaminacion-agricola/ 
 
                                                                                      \033[0;33m**************************\033[0;0m
                                                                                      \033[0;33m*\033[0;0m       V-Volver         \033[0;33m*\033[0;0m
                                                                                      \033[0;33m**************************\033[0;0m
-	
+
+    ------------------------------------------------------------------------------------------------------------------------------	
+
 	"""
 	print(instrucciones)
 	opcion=input("		\033[0;35mIngresa un opcion ->>\033[0;0m")
