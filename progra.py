@@ -252,7 +252,7 @@ def input_nombre(mensaje):
     print(mensaje)
     informacion_usuario[0] = input("\t\t\033[6;32m--->\033[0;0m ")
 
-    if informacion_usuario[0] == " " or informacion_usuario[0] == None:
+    if informacion_usuario[0] == "" or informacion_usuario[0] == None:
         print("		¿Es ese tu nombre?, ¿segurx? (\033[6;33mENTER\033[0;0m para reintentar)")
         return input_nombre(mensaje)
     
@@ -271,8 +271,13 @@ def input_zonas(mensaje):
         print("		Debes de ingresar un númer válido. ¡Intentalo de nuevo! (\033[6;33mENTER\033[0;0m para reintentar)")
         return input_zonas(mensaje)
     else:
-        num_zonas = int(num_zonas)
-        return num_zonas
+        if int(num_zonas)<=0 or int(num_zonas)>30:
+            print("		Debes de ingresar un númer válido. ¡Intentalo de nuevo! (\033[6;33mENTER\033[0;0m para reintentar)")
+            return input_zonas(mensaje)
+            
+        else:
+            num_zonas = int(num_zonas)
+            return num_zonas
 
 def input_personas(mensaje):
     """
@@ -289,8 +294,12 @@ def input_personas(mensaje):
         print("		¡Debes de ingresar un númer válido! Intentalo de nuevo (\033[6;33mENTER\033[0;0m para reintentar)")
         return input_personas(mensaje)
     else:
-        num_personas = int(num_personas)
-        return num_personas
+        if int(num_personas)<=0 or int(num_personas)>60:
+            print("		¡Debes de ingresar un número válido! Intentalo de nuevo (\033[6;33mENTER\033[0;0m para reintentar)")
+            return input_personas(mensaje)
+        else:
+            num_personas = int(num_personas)
+            return num_personas
     
 # ---------------------------------------------------------------------------------
 
@@ -701,7 +710,8 @@ def input_seleccion_zona(num_zonas, mensaje,personas,zonas,horario_zonas):
 	zona_seleccionada = input("\033[6;33m\t---> \033[0;0m")
 	if zona_seleccionada == "V" or zona_seleccionada == "v":
 		return menu_principal()
-	elif (zona_seleccionada == "g" or zona_seleccionada == "G") and horario_zonas == False:
+		
+	elif (zona_seleccionada == "g" or zona_seleccionada == "G"):
 		return turno(0, zonas, num_zonas, personas, len(personas))
 	
 	elif validacion_int(zona_seleccionada) == False:
@@ -752,7 +762,7 @@ def turno(indice, zonas, num_zonas, personas, num_personas):
         
         horario_zonas=validar_zonas_cerradas(zonas,len(zonas),0)
         if horario_zonas:
-            mensaje_input_zona = "\t¿A qué zona deseas acceder? o ingresa \033[1;33m\tV\033[0;0m para salir."
+            mensaje_input_zona = "\t¿A qué zona deseas acceder? o ingresa \033[1;33m\tV\033[0;0m para salir, si tu parque favorito esta cerrado ingresa \033[1;34m\tG\033[0;0m para volver en otro horario."
         else:
             mensaje_input_zona = "\tEn este horario todos los parques estan cerrados o ingresa. \033[1;33m\tV\033[0;0m para salir o \033[1;34m\tG\033[0;0m para volver en otro horario."
         
